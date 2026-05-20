@@ -1,0 +1,24 @@
+{
+  "overview": "Tracify is an industrial-grade traceability app for food manufacturing. It tracks batches from raw materials through production with 3 interconnected log books, role-based access for supervisors and operators, audit trails, and printable compliance reports.",
+  "features": [
+    "Backward traceability: type a batch code to see all raw materials and lot numbers used",
+    "Forward traceability: type a lot number to see all batches it appeared in",
+    "Packing Log, Tank Room Log, and Raw Materials log books with full CRUD",
+    "User login with supervisor and operator roles",
+    "Audit trail on every record showing who created or edited it",
+    "Date-range filters on all log books",
+    "Mandatory field validation to prevent incomplete records",
+    "Printable PDF traceability reports for compliance audits"
+  ],
+  "category": "operations-compliance",
+  "tags": [
+    "traceability",
+    "food-manufacturing",
+    "audit-trail",
+    "compliance",
+    "log-books",
+    "batch-tracking",
+    "lot-numbers"
+  ],
+  "last_updated": "2026-05-18T16:48:07.172Z"
+}

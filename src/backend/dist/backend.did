@@ -1,0 +1,221 @@
+type TankUsage = 
+ record {
+   date: text;
+   foodTankNo: text;
+   shift: text;
+ };
+type TankStatus = 
+ variant {
+   Feed;
+   Food;
+   Hold;
+ };
+type TankRoomLogInput = 
+ record {
+   batchCode: text;
+   cleaned: bool;
+   correctiveAction: text;
+   date: text;
+   fillingTimeIn: text;
+   fillingTimeOut: text;
+   foodTankNo: text;
+   permanentTankNumber: text;
+   productRun: text;
+   reasonForHold: text;
+   remark: text;
+   shift: text;
+   tankStatus: TankStatus;
+ };
+type TankRoomLogEntry = 
+ record {
+   batchCode: text;
+   cleaned: bool;
+   correctiveAction: text;
+   createdAt: int;
+   createdBy: text;
+   date: text;
+   fillingTimeIn: text;
+   fillingTimeOut: text;
+   foodTankNo: text;
+   id: nat;
+   permanentTankNumber: text;
+   productRun: text;
+   reasonForHold: text;
+   remark: text;
+   shift: text;
+   tankStatus: TankStatus;
+   updatedAt: opt int;
+   updatedBy: opt text;
+ };
+type ShiftReport = 
+ record {
+   date: text;
+   packingEntries: vec PackingLogEntry;
+   rawMaterialEntries: vec MuesliProcessLogEntry;
+   shift: text;
+   tankEntries: vec TankRoomLogEntry;
+ };
+type PackingReference = 
+ record {
+   batchCode: text;
+   date: text;
+   foodTankNos: vec text;
+   productName: text;
+ };
+type PackingLogInput = 
+ record {
+   batchCode: text;
+   bestBefore: text;
+   bulkBagLotNo: text;
+   bulkBagSupplier: text;
+   caseCode: text;
+   casePartitionLotNo: text;
+   casePartitionSupplier: text;
+   crew: text;
+   date: text;
+   machineNo: text;
+   mfgDate: text;
+   mrp: text;
+   netWeight: text;
+   productName: text;
+   tankBatchCodes: vec text;
+   variety: text;
+ };
+type PackingLogEntry = 
+ record {
+   batchCode: text;
+   bestBefore: text;
+   bulkBagLotNo: text;
+   bulkBagSupplier: text;
+   caseCode: text;
+   casePartitionLotNo: text;
+   casePartitionSupplier: text;
+   createdAt: int;
+   createdBy: text;
+   crew: text;
+   date: text;
+   id: nat;
+   machineNo: text;
+   mfgDate: text;
+   mrp: text;
+   netWeight: text;
+   productName: text;
+   tankBatchCodes: vec text;
+   updatedAt: opt int;
+   updatedBy: opt text;
+   variety: text;
+ };
+type MuesliProcessLogInput = 
+ record {
+   date: text;
+   ingredients: vec IngredientRow;
+   product: text;
+   run: text;
+   shift: text;
+ };
+type MuesliProcessLogEntry = 
+ record {
+   createdAt: int;
+   createdBy: text;
+   date: text;
+   id: nat;
+   ingredients: vec IngredientRow;
+   product: text;
+   run: text;
+   shift: text;
+   updatedAt: opt int;
+   updatedBy: opt text;
+ };
+type IngredientRow = 
+ record {
+   closingStock: text;
+   ingredientName: text;
+   issueFromStores: text;
+   lotNo: text;
+   openingStock: text;
+   qty: text;
+ };
+type ForwardTraceResult = 
+ record {
+   lotNo: text;
+   muesliDates: vec text;
+   packingEntries: vec PackingReference;
+ };
+type FlaggedRecord = 
+ record {
+   linkedBatchCodes: vec text;
+   linkedLotNumbers: vec text;
+   tankEntry: TankRoomLogEntry;
+ };
+type DateText = text;
+type DateRange = 
+ record {
+   fromDate: DateText;
+   toDate: DateText;
+ };
+type DateIngredients = 
+ record {
+   date: text;
+   ingredients: vec IngredientRow;
+   product: text;
+   run: text;
+   shift: text;
+ };
+type DashboardStats = 
+ record {
+   holdsCount: nat;
+   rawMaterialsConsumedThisWeek: nat;
+   totalBatchesThisWeek: nat;
+ };
+type BackwardTraceResult = 
+ record {
+   batchCode: text;
+   muesliLogs: vec DateIngredients;
+   tanks: vec TankUsage;
+ };
+service : {
+  addMuesliProcessLog: (input: MuesliProcessLogInput) ->
+   (variant {
+      err: text;
+      ok: MuesliProcessLogEntry;
+    });
+  addPackingLog: (input: PackingLogInput) ->
+   (variant {
+      err: text;
+      ok: PackingLogEntry;
+    });
+  addTankRoomLog: (input: TankRoomLogInput) ->
+   (variant {
+      err: text;
+      ok: TankRoomLogEntry;
+    });
+  backwardTraceability: (batchCode: text) -> (BackwardTraceResult) query;
+  checkDuplicateBatchCode: (batchCode: text) -> (bool) query;
+  checkDuplicateLotNumber: (lotNumber: text, logBook: text) -> (bool) query;
+  deleteMuesliProcessLog: (id: nat) -> (bool);
+  deletePackingLog: (id: nat) -> (bool);
+  deleteTankRoomLog: (id: nat) -> (bool);
+  forwardTraceability: (lotNo: text) -> (ForwardTraceResult) query;
+  getDashboardStats: () -> (DashboardStats) query;
+  getFlaggedRecords: () -> (vec FlaggedRecord) query;
+  getMuesliProcessLogs: (dateRange: opt DateRange) ->
+   (vec MuesliProcessLogEntry) query;
+  getPackingLogs: (dateRange: opt DateRange) -> (vec PackingLogEntry) query;
+  getShiftReport: (date: text, shift: text) -> (ShiftReport) query;
+  getTankRoomLogs: (dateRange: opt DateRange) -> (vec TankRoomLogEntry) query;
+  updateMuesliProcessLog: (entry: MuesliProcessLogEntry) ->
+   (variant {
+      err: text;
+      ok: bool;
+    });
+  updatePackingLog: (entry: PackingLogEntry) ->
+   (variant {
+      err: text;
+      ok: bool;
+    });
+  updateTankRoomLog: (entry: TankRoomLogEntry) ->
+   (variant {
+      err: text;
+      ok: bool;
+    });
+}

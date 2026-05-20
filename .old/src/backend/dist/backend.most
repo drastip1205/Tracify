@@ -1,0 +1,97 @@
+// Version: 1.0.0
+type IngredientRow__458313912 =
+  {
+    closingStock : Text;
+    ingredientName : Text;
+    issueFromStores : Text;
+    lotNo : Text;
+    openingStock : Text;
+    qty : Text
+  };
+type MuesliProcessLogEntry__706364366 =
+  {
+    createdAt : Int;
+    createdBy : Text;
+    date : Text;
+    id : Nat;
+    ingredients : [IngredientRow__458313912];
+    product : Text;
+    run : Text;
+    shift : Text;
+    updatedAt : ?Int;
+    updatedBy : ?Text
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type PackingLogEntry__720435908 =
+  {
+    batchCode : Text;
+    bestBefore : Text;
+    bulkBagLotNo : Text;
+    bulkBagSupplier : Text;
+    caseCode : Text;
+    casePartitionLotNo : Text;
+    casePartitionSupplier : Text;
+    createdAt : Int;
+    createdBy : Text;
+    crew : Text;
+    date : Text;
+    id : Nat;
+    machineNo : Text;
+    mfgDate : Text;
+    mrp : Text;
+    netWeight : Text;
+    productName : Text;
+    tankBatchCodes : [Text];
+    updatedAt : ?Int;
+    updatedBy : ?Text;
+    variety : Text
+  };
+type TankRoomLogEntry__721403004 =
+  {
+    batchCode : Text;
+    cleaned : Bool;
+    correctiveAction : Text;
+    createdAt : Int;
+    createdBy : Text;
+    date : Text;
+    fillingTimeIn : Text;
+    fillingTimeOut : Text;
+    foodTankNo : Text;
+    id : Nat;
+    permanentTankNumber : Text;
+    productRun : Text;
+    reasonForHold : Text;
+    remark : Text;
+    shift : Text;
+    tankStatus : TankStatus__767963891;
+    updatedAt : ?Int;
+    updatedBy : ?Text
+  };
+type TankStatus__767963891 = {#Feed; #Food; #Hold};
+actor {
+  stable var muesliNextId : Nat;
+  stable muesliState : {var nextId : Nat};
+  stable var muesliStore :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MuesliProcessLogEntry__706364366]];
+      var elementIndex : Nat__490723111
+    };
+  stable var packingNextId : Nat;
+  stable packingState : {var nextId : Nat};
+  stable var packingStore :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?PackingLogEntry__720435908]];
+      var elementIndex : Nat__490723111
+    };
+  stable var tankNextId : Nat;
+  stable tankState : {var nextId : Nat};
+  stable var tankStore :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?TankRoomLogEntry__721403004]];
+      var elementIndex : Nat__490723111
+    }
+};
